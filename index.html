@@ -60,13 +60,13 @@ Knots are classified as being small, medium, or large in size, and even or uneve
 <script>
 
 
-var width = 4000,
+var width = 4400,
     height = 6000;
 
 var imgSize = 200;
 
 var tree = d3.layout.cluster()
-    .size([height, width - Math.round(imgSize * 2.5)]);
+    .size([height, width - Math.round(imgSize * 3.5)]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
@@ -74,8 +74,8 @@ var diagonal = d3.svg.diagonal()
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(40,0)");
+    .append("g")
+    .attr("transform", "translate(" + imgSize + ",0)");
 
 d3.json("tietree.json", function(error, json) {
   if (error) throw error;
@@ -104,7 +104,10 @@ d3.json("tietree.json", function(error, json) {
 
 
   node.append("text")
-      .attr("dx", function(d) { return d.children ? (0 - Math.round(imgSize * 0.75)) : 8; })
+      .attr("dx", function(d) {
+        if (!d.img) return -8; // hack for root node
+        return d.children ? (0 - Math.round(imgSize * 0.75)) : 8;
+      })
       .attr("dy", 3)
       .attr("font-size", function (d) { return Math.round(imgSize * (d.children ? 0.16 : 0.30)) + "px"; })
       .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
